@@ -268,7 +268,7 @@ print_r($city);  echo "<hr>";
  $arr2 = ["หมา", "เเมว", "หมู", "มด"];
 
  $resultCombine = array_combine($arr1, $arr2);
- print_r($resultCombine);
+ print_r($resultCombine); echo "<hr>";
 ?>
 
 
