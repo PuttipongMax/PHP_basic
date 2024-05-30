@@ -3,7 +3,7 @@
  require_once "office.php";
  require_once "company.php";
 
- class Programmer extends Employee implements Office{
+ class Programmer extends Employee implements Office, Company{
   function __construct($name, $salary){
    parent::__construct($name, "Programmer", $salary);
    echo "working = ".$this->companyName."<br>";
@@ -19,6 +19,9 @@
   }
   public function setWorking($work):string{
    return "working style".$work."<br>";
+  }
+  public function setCompanyName($name){
+   
   }
  }
 ?>
