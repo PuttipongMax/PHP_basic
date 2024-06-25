@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -56,7 +57,6 @@
 <?php 
  include('./config/config.php');
  session_start();
- 
  $sql_fetch = "SELECT
     ROW_NUMBER() OVER (ORDER BY g.effective_date ASC) AS auto_id,
     g.\"effective_date\",
@@ -107,7 +107,7 @@
  <div style="display: flex; justify-content: center; align-items: center;
  background-color: #73ABD1; margin-top: 4px; padding-top: 0.5rem; padding-bottom: 0.5rem;">
   <button id='close' onclick="closeWindow()">ปิด</button>
-  <button id=create' onclick="requestRate('add')">เพิ่มอัตราดอกเบี้ยอ้างอิง</button>
+  <button id=create' onclick="requestRate('add', '<?php echo $effective_date; ?>')">เพิ่มอัตราดอกเบี้ยอ้างอิง</button>
  </div> 
 </body>
 </html>

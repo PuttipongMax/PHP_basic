@@ -1,9 +1,16 @@
 <?php 
- include('./config/config.php');
+  include('./config/config.php');
+
+  $date = "";
+  $mlr_rate = "";
+  $mrr_rate = "";
+  $remark = "";
+  $auto_id = ""; // Add this line to initialize $auto_id
 
  if (isset($_GET['req'], $_GET['effective_date'])){
   $req = $_GET['req'];
   $effective_date = $_GET['effective_date'];
+
   if($_POST && $req === 'edit'){
    $auto_id = $_POST['auto_id'];
    $date = $_POST['date'];
@@ -18,7 +25,7 @@
    $remark = "";
   }
 
-  echo $date, $mlr_rate, $mrr_rate, $remark;
+  echo $date, $mlr_rate, $mrr_rate, $remark, $req;
  }else{
   echo "ไม่พบข้อมูลที่ส่งมา";
  }
@@ -34,11 +41,43 @@
   function back(){  
    window.location.href="ref_index.php";
   }
-  function handleInputChange(event){
-    document.getElementById('mlr_rate').value = event.target.value;
-    console.log('newValue: ', event.target.value);
+  function requestRate(req, effective_date, auto_id, date, mlr_rate, mrr_rate, remark){
+  var form = document.createElement('form');
+    form.method = 'post';
+    form.action = `process_ref.php?req=${req}&effective_date=${effective_date}`;
 
+    var autoIDInput = document.createElement('input');
+    autoIDInput.type = 'hidden';
+    autoIDInput.name = 'auto_id';
+    autoIDInput.value = auto_id;
     form.appendChild(autoIDInput);
+
+    var dateInput = document.createElement('input');
+    dateInput.type = 'hidden';
+    dateInput.name = 'date';
+    dateInput.value = date;
+    form.appendChild(dateInput);
+
+    var mlrRateInput = document.createElement('input');
+    mlrRateInput.type = 'hidden';
+    mlrRateInput.name = 'mlr_rate';
+    mlrRateInput.value = mlr_rate;
+    form.appendChild(mlrRateInput);
+
+    var mrrRateInput = document.createElement('input');
+    mrrRateInput.type = 'hidden';
+    mrrRateInput.name = 'mrr_rate';
+    mrrRateInput.value = mrr_rate;
+    form.appendChild(mrrRateInput);
+
+    var remarkInput = document.createElement('input');
+    remarkInput.type = 'hidden';
+    remarkInput.name = 'remark';
+    remarkInput.value = remark;
+    form.appendChild(remarkInput);
+
+    document.body.appendChild(form);
+    form.submit();
   }
  </script>
 </head>
@@ -52,19 +91,23 @@
     ">    
      <label style="display: flex; justify-content: center; align-items: start; gap: 1.5rem;">
       เวลาที่มีผล
-      <input value="<?php echo $date; ?>" readonly>
+      <?php if($req === 'edit'): ?>
+        <input name="date" value="<?php echo $date; ?>" readonly>
+      <?php elseif($req === 'add'): ?>
+        <input name="date" value="<?php echo $date; ?>" >
+      <?php endif; ?>
      </label >
-     <lSabel style="display: flex; justify-content: center; align-items: start; gap: 3.8rem;">
+     <label style="display: flex; justify-content: center; align-items: start; gap: 3.8rem;">
       MLR
-      <input value="<?php echo $mlr_rate; ?>" onchange="(event) => handleInputChange(event.target.value)" >
-     </lSabel>
+      <input name="mlr_rate" value="<?php echo $mlr_rate; ?>" >
+     </label>
      <label style="display: flex; justify-content: center; align-items: start; gap: 3.8rem;">
       MRR
-      <input value="<?php echo $mrr_rate; ?>" >
+      <input name="mrr_rate" value="<?php echo $mrr_rate; ?>" >
      </label>
      <label style="display: flex; justify-content: center; align-items: start; gap: 3.2rem;">
       remark
-      <input value="" >
+      <input name="remark" value="<?php echo $remark; ?>" >
      </label>
     </div>   
    </form>
@@ -72,7 +115,19 @@
     border-style: none solid solid solid; border-color: #111;
     display: flex; justify-content: center; align-items: start;">
     <button type="button" id="back" onclick="back()" style="margin: 0 0 0 2rem;">กลับ</button>
-    <button style="margin-left: 1rem;">บันทึก</button>
+    <button 
+      style="margin-left: 1rem;" 
+      onclick="requestRate(
+       '<?php echo $req; ?>', 
+       '<?php echo $effective_date; ?>', 
+       '<?php echo $auto_id; ?>', 
+       document.querySelector('input[name=date]').value, 
+       document.querySelector('input[name=mlr_rate]').value,
+       document.querySelector('input[name=mrr_rate]').value, 
+       document.querySelector('input[name=remark]').value)
+       ">
+        บันทึก
+      </button>
    </div>
  </div>
 </body>
