@@ -41,8 +41,22 @@
   function back(){  
    window.location.href="ref_index.php";
   }
+  function validateNumberFormat(value) {
+    const pattern = /^\d{1,2}\.\d{3}$/;
+    return pattern.test(value);
+  }
+
   function requestRate(req, effective_date, auto_id, date, mlr_rate, mrr_rate, remark){
-  var form = document.createElement('form');
+    if (!validateNumberFormat(mlr_rate)) {
+      alert("MLR rate must follow the format ##.###");
+      return;
+    }
+    if (!validateNumberFormat(mrr_rate)) {
+      alert("MRR rate must follow the format ##.###");
+      return;
+    }
+  
+    var form = document.createElement('form');
     form.method = 'post';
     form.action = `process_ref.php?req=${req}&effective_date=${effective_date}`;
 
